@@ -34,6 +34,7 @@
                 <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
                 <div><i class="fa-solid fa-forward"></i></div>
             </div>
+            <div id="timer">0:00/2.33</div> 
         </div>
     </div>
 
@@ -41,38 +42,43 @@
         let progress = document.getElementById("progress");
         let song = document.getElementById("song");
         let ctrlIcon = document.getElementById("ctrlIcon");
-    
-        song.onloadedmetadata = function(){
+        let timer = document.getElementById("timer");
+
+        song.onloadedmetadata = function () {
             progress.max = song.duration;
             progress.value = song.currentTime;
         }
-    
-        function playPause(){
-            if(ctrlIcon.classList.contains("fa-pause")){
+
+        function playPause() {
+            if (ctrlIcon.classList.contains("fa-pause")) {
                 song.pause();
-                ctrlIcon.classList.remove("fa-pause"); 
-                ctrlIcon.classList.add("fa-play"); 
-            }else{
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            } else {
                 song.play();
-                ctrlIcon.classList.add("fa-pause"); 
-                ctrlIcon.classList.remove("fa-play"); 
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+                startTimer(); 
             }
         }
 
-        if(song.play()){
+        function startTimer() {
             setInterval(() => {
-                progress.value = song.currentTime;
-            },500)
+                let minutes = Math.floor(song.currentTime / 60);
+                let seconds = Math.floor(song.currentTime % 60);
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                timer.textContent = minutes + ':' + seconds;
+            }, 1000); 
         }
 
-        progress.onchange = function(){
+        progress.onchange = function () {
             song.play();
             song.currentTime = progress.value;
-            ctrlIcon.classList.add("fa-pause"); 
-            ctrlIcon.classList.remove("fa-play"); 
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
         }
     </script>
-    
+
 </body>
 
 </html>
